@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>วิเคราะห์ความคิดเห็น YouTube</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/index.css?v=3">
+</head>
+<body>
+  <!-- ฉากหลัง -->
+  <div class="backdrop"></div>
+
+  <main class="page">
+    <section class="container">
+
+      <h1 class="app-title">วิเคราะห์ความคิดเห็น<br><span>YouTube</span></h1>
+
+      <div class="segmented-selector" role="tablist" aria-label="เลือกประเภทลิงก์">
+        <input type="radio" id="type-video"   name="input_type" value="video"   checked>
+        <label for="type-video"   role="tab" aria-selected="true">วิดีโอ</label>
+
+        <input type="radio" id="type-channel" name="input_type" value="channel">
+        <label for="type-channel" role="tab" aria-selected="false">ช่อง</label>
+      </div>
+
+      <!-- ฟอร์ม -->
+      <form id="mainForm" action="/analyze" method="post">
+        <!-- ไม่มี label ตัวหนังสือแล้ว ใช้ aria-label แทน -->
+        <input
+          type="text"
+          id="url_input"
+          name="input_url"
+          placeholder="เช่น https://www.youtube.com/watch?v=xxxxxxxxxxx"
+          aria-label="วางลิงก์ YouTube ที่ต้องการ"
+          required
+          autocomplete="off"
+        >
+
+        <input type="hidden" id="analysisModeHidden" name="analysis_mode" value="video">
+
+        <input type="submit" id="submitButton" value="วิเคราะห์ความคิดเห็น">
+      </form>
+
+      <div id="errorMessage" class="error-message" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Overlay โหลด (เต็มจอเสมอ) -->
+  <div id="loadingOverlay" class="loading-overlay" aria-hidden="true">
+    <div class="loading-box" role="status" aria-live="polite" aria-atomic="true">
+      <div class="spinner"></div>
+      <p>กำลังประมวลผล... โปรดรอสักครู่</p>
+    </div>
+  </div>
+
+  <script src="/static/js/index.js?v=3"></script>
+</body>
+</html>

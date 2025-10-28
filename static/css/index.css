@@ -1,0 +1,161 @@
+:root{
+  --glass-bg: rgba(255,255,255,.12);
+  --glass-brd: rgba(255,255,255,.25);
+  --ink-1:#eaf2ff; --ink-2:#cfd9ef; --ink-3:#9fb2da;
+  --accent:#4da3ff; /* glow */
+}
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--ink-1);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* ฉากหลัง */
+.backdrop{
+  position:fixed; inset:0; z-index:-1;
+  background:
+    radial-gradient(900px 500px at 20% 75%, rgba(0,180,255,.25), transparent 60%),
+    radial-gradient(700px 500px at 80% 10%, rgba(140,100,255,.25), transparent 50%),
+    linear-gradient(180deg,#1b2a3a 0%, #0f172a 100%);
+  filter:saturate(115%);
+}
+
+/* กึ่งกลางทั้งหน้า */
+.page{
+  min-height:100dvh;
+  display:grid; place-items:center;
+  padding:24px 16px;
+}
+
+/* Card (ใส/กระจก) */
+.container{
+  width:min(900px, 92vw);
+  padding:clamp(24px,3.6vw,44px);
+  border-radius:22px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-brd);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  box-shadow:0 30px 100px rgba(2,8,23,.45), inset 0 1px 0 rgba(255,255,255,.15);
+  text-align:center;
+}
+
+/* Title */
+.app-title{
+  margin:0 0 18px;
+  font-weight:800;
+  font-size:clamp(28px,3.8vw,40px);
+  line-height:1.15;
+  text-shadow:0 2px 18px rgba(0,0,0,.35);
+}
+.app-title span{ font-size:clamp(30px,4.6vw,48px) }
+
+/* Segmented selector — สไตล์ใสๆ + สถานะชัด */
+.segmented-selector{
+  display:flex; align-items:center; gap:10px;
+  padding:8px;
+  margin:10px auto 18px;
+  width:min(660px,100%);
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+}
+.segmented-selector input[type="radio"]{ position:absolute; opacity:0; pointer-events:none; }
+.segmented-selector label{
+  flex:1 1 0;
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:14px 18px; border-radius:12px; cursor:pointer; user-select:none;
+  color:var(--ink-2); font-weight:800; letter-spacing:.2px;
+  border:1px solid transparent;
+  transition:all .18s ease;
+  background:transparent;
+}
+.segmented-selector label:hover{ color:#fff; background:rgba(255,255,255,.07) }
+.segmented-selector input[type="radio"]:checked + label{
+  color:#fff;
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.28);
+  box-shadow:
+     0 6px 28px rgba(255, 255, 255, 0.718),
+     inset 0 1px 0 rgba(255,255,255,.22),
+     0 0 0 6px rgba(255, 255, 255, 0.227); /* แสดงว่าเลือกอยู่ */
+  transform: translateY(-1px);
+}
+
+/* Input */
+input[type="text"]{
+  display:block;
+  width:min(660px,100%);
+  margin:0 auto 18px;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px solid var(--glass-brd);
+  background:rgba(255,255,255,.14);
+  color:var(--ink-1);
+  outline:none; font-size:16px;
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+input[type="text"]::placeholder{ color:var(--ink-3) }
+input[type="text"]:focus{
+  border-color: rgba(77,163,255,.7);
+  box-shadow: 0 0 0 6px rgba(77,163,255,.18);
+  background: rgba(20,30,45,.18);
+}
+
+/* ปุ่ม submit — ใสๆ มีลูกเล่น */
+#submitButton{
+  display:block; width:min(360px,85%); margin:6px auto 0;
+  padding:14px 18px; border-radius:14px; cursor:pointer; font-weight:800;
+  color:#fff; background:transparent; border:1px solid rgba(255,255,255,.28);
+  transition: transform .06s ease, box-shadow .18s ease, filter .18s ease, background .18s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+}
+#submitButton:hover{
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 16px 40px rgba(255, 255, 255, 0.28), inset 0 1px 0 rgba(255,255,255,.22);
+  filter: brightness(1.03);
+}
+#submitButton:active{ transform: translateY(1px) }
+#submitButton:disabled{ opacity:.7; cursor:not-allowed; box-shadow:none }
+
+/* Error */
+.error-message{
+  display:none; margin:16px auto 0; width:min(660px,100%);
+  padding:10px 12px; border-radius:12px;
+  background:rgba(255,60,60,.12); border:1px solid rgba(255,90,90,.25);
+  color:#ffd2d2;
+}
+
+/* Loading overlay — เต็มจอเสมอ */
+.loading-overlay{
+  position:fixed; inset:0; width:100vw; height:100vh;
+  display:none; place-items:center; z-index:9999;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  background:rgba(15,23,42,.28);
+}
+.loading-overlay.show{ display:grid }
+.loading-box{
+  display:flex; align-items:center; gap:14px; padding:16px 22px; border-radius:14px;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); color:#fff;
+  box-shadow:0 30px 80px rgba(2,8,23,.35), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.spinner{
+  width:46px; height:46px; border-radius:50%;
+  border:4px solid rgba(255,255,255,.25); border-top-color:var(--accent);
+  animation:spin 1s linear infinite; box-shadow:0 0 18px rgba(77,163,255,.6);
+}
+@keyframes spin{ to{ transform: rotate(360deg) } }
+
+/* มือถือ */
+@media (max-width:640px){
+  .segmented-selector{ gap:8px; padding:8px }
+  .segmented-selector label{ padding:12px }
+}

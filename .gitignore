@@ -1,0 +1,19 @@
+# Virtual Environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secret keys
+.env
+
+# Local results and logs
+/results/
+/logs/
+/model/
+/results_xlm_roberta/
+/logs_xlm_roberta/
+
+# VS Code settings
+.vscode/

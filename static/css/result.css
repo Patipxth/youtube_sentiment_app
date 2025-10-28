@@ -1,0 +1,256 @@
+/* ------------------ Root & Reset ------------------ */
+:root{
+  --bg-1:#0f1729;
+  --bg-2:#0b223a;
+  --glass:#ffffff12;
+  --glass-border:#ffffff33;
+  --txt:#e6edf6;
+  --muted:#b5c2d6;
+
+  --blue:#1e90ff;
+  --blue-2:#5aa6ff;
+  --green:#22c55e;
+  --red:#ef4444;
+  --amber:#f59e0b;
+
+  --chip-bg:#ffffff18;
+  --chip-br:#ffffff3a;
+}
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:
+    radial-gradient(1000px 600px at 20% 85%, #18c5ff26 0%, transparent 60%),
+    radial-gradient(900px 600px at 90% 10%, #8b5cf626 0%, transparent 55%),
+    linear-gradient(120deg, var(--bg-1), var(--bg-2));
+  overflow-x:hidden;
+}
+
+/* ------------------ Back Button ------------------ */
+.back-to-home-button{
+  display:inline-flex; align-items:center; gap:6px;
+  position:fixed; top:16px; left:16px; z-index:20;
+  padding:10px 14px; border-radius:12px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff; font-weight:600; text-decoration:none; white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+  cursor:pointer;
+  transition:background .18s ease, transform .06s ease, filter .18s ease;
+}
+.back-to-home-button:hover{ filter:brightness(1.05) }
+.back-form{ margin:0 }
+
+/* ------------------ Layout ------------------ */
+.page{
+  height: 100svh;
+  padding: 72px 20px 20px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;            /* กันไม่ให้ทั้งหน้าเลื่อน */
+}
+.glass{
+  height: 100%;
+  width: min(1200px, 94vw);
+  margin: 0 auto;
+
+  /* ✅ คืนกรอบ/กระจก */
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  box-shadow: 0 40px 80px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+  padding: 28px clamp(16px, 3vw, 36px) 24px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;               /* ให้ลูกหลาน overflow ได้ */
+}
+
+@media (min-height: 900px) and (min-width: 900px){
+  .page{ display:flex; align-items:flex-start; }
+}
+
+/* ------------------ Header ------------------ */
+.header{ text-align:center; margin:0 0 12px; }
+.header h1{
+  margin:6px 0 6px;
+  font-size:clamp(22px,2.6vw,32px);
+  font-weight:800; letter-spacing:.2px;
+}
+.video-info{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+.video-info img{
+  width:clamp(180px,26vw,320px); height:auto;
+  border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.video-title{
+  max-width:80ch; margin:0;
+  font-size:clamp(14px,1.5vw,18px);
+  color:var(--muted); font-weight:600;
+}
+
+/* ------------------ Content Grid ------------------ */
+.content-grid{
+  flex: 1;
+  min-height: 0;               /* อนุญาตให้หดได้ */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(18px, 2.4vw, 28px);
+}
+@media (max-width: 900px){
+  .content-grid{ grid-template-columns: 1fr; }
+}
+
+/* ------------------ Panels ------------------ */
+.panel{
+  /* ✅ มีกรอบ/การ์ดเหมือนเดิม */
+  background:#ffffff09;
+  border: 1px solid #ffffff28;
+  border-radius: 16px;
+  padding: clamp(14px, 2.2vw, 18px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;               /* สำคัญสำหรับสกอร์ลล์ภายใน */
+}
+.panel-title{ margin:0 0 10px }
+
+/* ---------- สกอร์ลล์เฉพาะในกรอบ ---------- */
+/* กล่อง "แนวโน้มโดยรวม" (panel ซ้าย) ให้เลื่อนภายในเมื่อยาวเกิน */
+.content-grid .panel:nth-of-type(1) .summary{
+  flex: 1;                     /* กินที่แนวตั้งที่เหลือใน panel */
+  min-height: 0;
+  overflow: auto;              /* มีสกอร์ลล์เฉพาะกรอบนี้ */
+}
+
+/* ------------------ Stats ------------------ */
+.stats{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:10px; margin-bottom:12px;
+}
+@media (max-width:600px){ .stats{ grid-template-columns:repeat(2,1fr) } }
+
+.stat-card{
+  border-radius:12px; padding:12px 10px; text-align:center;
+  background:#ffffff10; border:1px solid #ffffff2e;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.stat-label{ margin:0; color:#d8e3f5; font-size:clamp(11px,3.2vw,13px) }
+.stat-value{ margin:4px 0 0; font-size:clamp(16px,5.2vw,22px); font-weight:800 }
+.stat-card--all{ background:linear-gradient(180deg,#2a6df31a,#2a6df30f) }
+.stat-card--pos{ background:linear-gradient(180deg,#22c55e26,#22c55e14) }
+.stat-card--neg{ background:linear-gradient(180deg,#ef444426,#ef444414) }
+.stat-card--neu{ background:linear-gradient(180deg,#f59e0b26,#f59e0b14) }
+
+/* ------------------ Summary ------------------ */
+.summary{
+  background:#ffffff0b;
+  border:1px solid #ffffff22;
+  border-radius:12px;
+  padding:12px;
+}
+.summary h4{ margin:0 0 6px; font-size:15px; color:#eaf2ff }
+.summary p{
+  margin:0;
+  font-size:clamp(13px,3.4vw,15px);
+  line-height:1.45;
+}
+
+/* ------------------ Comment List ------------------ */
+.comment-list{
+  flex: 1;                     /* กินที่แนวตั้งที่เหลือใน panel */
+  min-height: 0;
+  overflow: auto;              /* มีสกอร์ลล์เฉพาะกรอบนี้ */
+    /* ที่เพิ่มเข้ามาเพื่อเว้นระยะระหว่างการ์ด */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;        /* ปรับ 8–16 ได้ตามชอบ */
+  padding: 6px 4px; /* กันสกอร์ลบาร์ชิดขอบ */
+}
+
+/* จำกัดความสูงบนจอเล็กให้ไม่ดันกล่องบน */
+@media (max-width:900px){
+  .comment-list{ max-height:44vh; }
+}
+@media (max-width:480px){
+  .comment-list{ max-height:46vh; }
+}
+
+.comment-item{
+  position:relative;
+  display:grid; grid-template-columns:1fr auto; align-items:center;
+  gap:10px; padding:14px 14px 14px 16px;
+  border-radius:14px; background:#ffffff10; border:1px solid #ffffff22;
+  box-shadow:0 6px 18px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* แถบสีซ้าย */
+.comment-item::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
+  border-radius:14px 0 0 14px; background:linear-gradient(180deg,#93a4bc,#6b7b95);
+}
+.comment-item[data-sentiment="positive"]::before{ background:linear-gradient(180deg,#32d25f,#16a34a) }
+.comment-item[data-sentiment="negative"]::before{ background:linear-gradient(180deg,#ff6b6b,#ef4444) }
+.comment-item[data-sentiment="neutral"]::before{  background:linear-gradient(180deg,#ffd469,#f59e0b) }
+
+.comment-text{
+  color:#e7eefc; line-height:1.45;
+  word-break:break-word; overflow-wrap:anywhere;
+  padding-right:6px; font-size:14px;
+}
+
+/* ชิป sentiment */
+.chip{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:86px; padding:8px 12px; border-radius:999px;
+  border:1px solid var(--chip-br); background:var(--chip-bg);
+  font-weight:700; letter-spacing:.2px; text-transform:lowercase; color:#e9f2ff;
+}
+.chip--pos{ background:linear-gradient(180deg,#20e07d33,#20e07d1a); border-color:#20e07d66 }
+.chip--neg{ background:linear-gradient(180deg,#ff6b6b33,#ff6b6b1a); border-color:#ff6b6b66 }
+.chip--neu{ background:linear-gradient(180deg,#f5b94233,#f5b9421a); border-color:#f5b94266 }
+.chip--skip{ background:#9aa4b11f; border-color:#9aa4b144; color:#e5e7eb }
+.chip--unk { background:#c084fc1f; border-color:#c084fc44 }
+
+/* สวยงามสกอร์ลบาร์ */
+.comment-list::-webkit-scrollbar,
+.content-grid .panel:nth-of-type(1) .summary::-webkit-scrollbar{ width:10px }
+.comment-list::-webkit-scrollbar-thumb,
+.content-grid .panel:nth-of-type(1) .summary::-webkit-scrollbar-thumb{
+  background:#ffffff29; border-radius:10px;
+  border:2px solid transparent; background-clip:padding-box;
+}
+
+/* XS screens */
+@media (max-width:400px){ .glass{ width:92vw } }
+
+/* ====== ทำให้ 'แนวโน้มโดยรวม' เลื่อนภายในได้เหมือน comment-list ====== */
+@media (max-width: 900px){
+  .summary{
+    max-height: 24vh;     /* ปรับได้ตามชอบ */
+    overflow: auto;
+  }
+}
+@media (max-width: 480px){
+  .summary{
+    max-height: 28vh;     /* จอเล็ก เพิ่มพื้นที่เล็กน้อย */
+  }
+}
+
+/* ใช้สไตล์สกอร์ลบาร์เดียวกับ comment-list */
+.summary::-webkit-scrollbar{ width:10px }
+.summary::-webkit-scrollbar-thumb{
+  background:#ffffff29; border-radius:10px;
+  border:2px solid transparent; background-clip:padding-box;
+}
+.summary::-webkit-scrollbar-track{ background:transparent }
+
+/* กันสกอร์ลบาร์ชิดขอบเกินไป */
+.summary{ padding-right: 4px; }

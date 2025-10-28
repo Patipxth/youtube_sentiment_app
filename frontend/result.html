@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ผลการวิเคราะห์ความคิดเห็น</title>
+  <link rel="stylesheet" href="/static/css/result.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  {# ปุ่มกลับ: ถ้ามี channel_url ให้กลับไปหน้าช่อง, ไม่งั้นกลับหน้าหลัก #}
+  {% if channel_url %}
+  <form class="back-form" action="/get_channel_videos" method="post">
+    <input type="hidden" name="channel_url" value="{{ channel_url }}">
+    <button type="submit" class="back-to-home-button">กลับไปหน้าช่อง</button>
+  </form>
+  {% else %}
+  <a href="/" class="back-to-home-button">กลับไปหน้าหลัก</a>
+  {% endif %}
+
+  <div class="page">
+    <div class="glass">
+      <header class="header">
+        <h1>ผลการวิเคราะห์ความคิดเห็น</h1>
+        <div class="video-info">
+          <img src="{{ video_thumbnail }}" alt="ปกวิดีโอ" />
+          <h2 class="video-title">{{ video_title }}</h2>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <!-- สรุปภาพรวม -->
+        <section class="panel">
+          <h3 class="panel-title">สรุปภาพรวม</h3>
+          <div class="stats">
+            <div class="stat-card stat-card--all">
+              <p class="stat-label">ทั้งหมด</p>
+              <p class="stat-value">{{ total_comments }}</p>
+            </div>
+            <div class="stat-card stat-card--pos">
+              <p class="stat-label">บวก</p>
+              <p class="stat-value">{{ positive_count }}</p>
+            </div>
+            <div class="stat-card stat-card--neg">
+              <p class="stat-label">ลบ</p>
+              <p class="stat-value">{{ negative_count }}</p>
+            </div>
+            <div class="stat-card stat-card--neu">
+              <p class="stat-label">กลาง</p>
+              <p class="stat-value">{{ neutral_count }}</p>
+            </div>
+          </div>
+
+          <div class="summary">
+            <h4>แนวโน้มโดยรวม</h4>
+            <p>{{ overall_summary }}</p>
+          </div>
+        </section>
+
+        <!-- ความคิดเห็นทั้งหมด -->
+        <section class="panel">
+          <h3 class="panel-title">ความคิดเห็นทั้งหมด</h3>
+          <div class="comment-list">
+            {% for comment in comments %}
+              {% set s = comment.sentiment %}
+              <div class="comment-item"
+                   data-sentiment="{% if s=='positive' %}positive{% elif s=='negative' %}negative{% elif s=='neutral' %}neutral{% else %}unknown{% endif %}">
+                <div class="comment-text">{{ comment.text }}</div>
+{% set label_th =
+   'บวก' if s == 'positive' else
+   ('ลบ' if s == 'negative' else
+   ('กลาง' if s == 'neutral' else s)) %}
+
+<span class="chip
+  {% if s == 'positive' %} chip--pos
+  {% elif s == 'negative' %} chip--neg
+  {% elif s == 'neutral' %} chip--neu
+  {% elif s.startswith('เกินขีด') %} chip--skip
+  {% else %} chip--unk
+  {% endif %}">
+  {{ label_th }}
+</span>
+
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

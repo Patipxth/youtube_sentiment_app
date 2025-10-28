@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>วิดีโอจากช่อง {{ channel_details.channel_name }}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/channel_videos.css?v=4">
+</head>
+<body>
+  <div class="backdrop"></div>
+
+  <main class="page">
+    <a href="/" class="back-link back-outside" aria-label="กลับไปหน้าหลัก">กลับหน้าหลัก</a>
+
+    <section class="index-card channel-card">
+      <header class="card-header">
+        <h1 class="title">วิดีโอจากช่อง <span>YouTube</span></h1>
+      </header>
+
+      {% if channel_details %}
+      <div class="channel-info">
+        <img src="{{ channel_details.channel_thumbnail }}" alt="Channel thumbnail" class="channel-avatar">
+        <div class="meta">
+          <h2 class="channel-name">{{ channel_details.channel_name }}</h2>
+          <p class="subs">ผู้ติดตาม:
+            {{ "{:,.0f}".format(channel_details.subscriber_count | int) if channel_details.subscriber_count != 'N/A' else 'N/A' }}
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      <div id="allVideosContainer"
+           class="tab-content active"
+           data-channel-id="{{ channel_id }}"
+           data-next-page-token="{{ next_page_token or '' }}"
+           data-channel-url="{{ channel_url or '' }}">
+        <div id="allVideosGrid" class="video-grid">
+          {% if all_videos %}
+            {% for video in all_videos %}
+              <article class="video-item">
+                <a href="{{ video.video_url }}" target="_blank" class="thumb-wrap" aria-label="{{ video.title }}">
+                  <img src="{{ video.thumbnail }}" alt="" class="thumb">
+                </a>
+                <div class="video-body">
+                  <h3 class="video-title" title="{{ video.title }}">{{ video.title }}</h3>
+                  <span class="video-type badge">{{ video.video_type }}</span>
+                </div>
+                <form class="analyze-form" action="/analyze" method="post">
+                  <input type="hidden" name="input_url" value="{{ video.video_url }}">
+                  <input type="hidden" name="analysis_mode" value="video">
+                  <input type="hidden" name="channel_id" value="{{ channel_id }}">
+                  <input type="hidden" name="channel_url" value="{{ channel_url or '' }}">
+                  <button type="submit" class="analyze-button">วิเคราะห์ความคิดเห็น</button>
+                </form>
+              </article>
+            {% endfor %}
+          {% else %}
+            <p class="empty">ไม่พบวิดีโอสำหรับช่องนี้</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if next_page_token %}
+      <div class="load-more-container">
+        <button id="loadMoreButton" class="load-more-button">ดูเพิ่มเติม</button>
+      </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <!-- ✅ ย้าย overlay ออกมาเป็นลูกของ <body> -->
+  <div id="loadingOverlay" class="loading-overlay" aria-hidden="true">
+    <div class="loading-box" role="status" aria-live="polite" aria-atomic="true">
+      <div class="spinner"></div>
+      <p>กำลังประมวลผล... โปรดรอสักครู่</p>
+    </div>
+  </div>
+
+  <script src="/static/js/channel_videos.js?v=4"></script>
+</body>
+</html>
